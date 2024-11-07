@@ -26,7 +26,7 @@ define
 
 Inv_SelectedIDsCount == Len(selectedIDs) <= PRODUCER_COUNT
 
-Inv_SelectedIDsAreValid == \A id \in DOMAIN selectedIDs : \E v \in 1..Len(VALIDATORS) : VALIDATORS[v].id = id
+Inv_SelectedIDsAreValid == \A s \in DOMAIN selectedIDs : \E v \in DOMAIN VALIDATORS : VALIDATORS[v].id = selectedIDs[s]
 
 Inv_AllSelectedWhenTooFew == (Len(VALIDATORS) < PRODUCER_COUNT) => (selectedIDs = [m \in 1..Len(VALIDATORS) |-> VALIDATORS[m].id])
 
@@ -68,14 +68,14 @@ selectIds:
         selectedIDs := SubSeq(shuffledList, 1, PRODUCER_COUNT);
     end if;
 end algorithm; *)
-\* BEGIN TRANSLATION (chksum(pcal) = "4be164a8" /\ chksum(tla) = "1332f0ad")
+\* BEGIN TRANSLATION (chksum(pcal) = "2c94a91f" /\ chksum(tla) = "5736f78")
 CONSTANT defaultInitValue
 VARIABLES selectedIDs, IDs, seed, i, j, val, nSlots, shuffledList, pc
 
 (* define statement *)
 Inv_SelectedIDsCount == Len(selectedIDs) <= PRODUCER_COUNT
 
-Inv_SelectedIDsAreValid == \A id \in DOMAIN selectedIDs : \E v \in 1..Len(VALIDATORS) : VALIDATORS[v].id = id
+Inv_SelectedIDsAreValid == \A s \in DOMAIN selectedIDs : \E v \in DOMAIN VALIDATORS : VALIDATORS[v].id = selectedIDs[s]
 
 Inv_AllSelectedWhenTooFew == (Len(VALIDATORS) < PRODUCER_COUNT) => (selectedIDs = [m \in 1..Len(VALIDATORS) |-> VALIDATORS[m].id])
 
