@@ -1,9 +1,9 @@
 -------- MODULE producers --------
 
-EXTENDS Naturals, Sequences, FiniteSets, utilities
+EXTENDS Integers, Sequences, FiniteSets, utilities
 
 \* Definition of a Validator record
-Validator == [id: Nat, votingPower: Nat]
+Validator == [id: Int, votingPower: Int]
 
 CONSTANTS SLOT_COST, PRODUCER_COUNT, BLOCK_HASH, VALIDATORS
 
@@ -23,9 +23,15 @@ variables
     shuffledList = << >>;
     
 define
-    \* Invariant
-    Inv_SelectedIDsCount == Len(selectedIDs) <= PRODUCER_COUNT
-end define;
+
+Inv_SelectedIDsCount == Len(selectedIDs) <= PRODUCER_COUNT
+
+Inv_SelectedIDsAreValid == \A id \in DOMAIN selectedIDs : \E v \in 1..Len(VALIDATORS) : VALIDATORS[v].id = id
+
+Inv_AllSelectedWhenTooFew == (Len(VALIDATORS) < PRODUCER_COUNT) => (selectedIDs = [m \in 1..Len(VALIDATORS) |-> VALIDATORS[m].id])
+
+end define;   
+
     
 begin
 check:
@@ -62,12 +68,16 @@ selectIds:
         selectedIDs := SubSeq(shuffledList, 1, PRODUCER_COUNT);
     end if;
 end algorithm; *)
-\* BEGIN TRANSLATION (chksum(pcal) = "9b79c139" /\ chksum(tla) = "3b15ca5")
+\* BEGIN TRANSLATION (chksum(pcal) = "4be164a8" /\ chksum(tla) = "1332f0ad")
 CONSTANT defaultInitValue
 VARIABLES selectedIDs, IDs, seed, i, j, val, nSlots, shuffledList, pc
 
 (* define statement *)
 Inv_SelectedIDsCount == Len(selectedIDs) <= PRODUCER_COUNT
+
+Inv_SelectedIDsAreValid == \A id \in DOMAIN selectedIDs : \E v \in 1..Len(VALIDATORS) : VALIDATORS[v].id = id
+
+Inv_AllSelectedWhenTooFew == (Len(VALIDATORS) < PRODUCER_COUNT) => (selectedIDs = [m \in 1..Len(VALIDATORS) |-> VALIDATORS[m].id])
 
 
 vars == << selectedIDs, IDs, seed, i, j, val, nSlots, shuffledList, pc >>
